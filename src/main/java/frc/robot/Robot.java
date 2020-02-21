@@ -33,7 +33,7 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     // Add Oblog support
-    Logger.configureLoggingAndConfig(m_robotContainer, false);
+    Logger.configureLoggingAndConfig(m_robotContainer, true);
   }
 
   /**

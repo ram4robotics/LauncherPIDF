@@ -33,10 +33,10 @@ public class Launcher extends SubsystemBase implements Loggable {
   @Log.Graph
   private double m_velocityL, m_velocityR;
 
-  @Config
+  private boolean m_displayPIDFvals=false;
+
   private double m_kP, m_kI, m_kD, m_kIz, m_kFF;
 
-  @Config
   private double m_velocitySetpoint;
 
   /**
@@ -92,6 +92,9 @@ public class Launcher extends SubsystemBase implements Loggable {
 
   @Override
   public void periodic() {
+    if (m_displayPIDFvals) {
+      System.out.println("kP = " + m_kP + ", kI = " + m_kI + ", kD = " + m_kD + ", m_velocitySetpoint = " + m_velocitySetpoint);
+    }
     if (Robot.isReal()) {
       // This method will be called once per scheduler run
       m_velocityL = m_encoderL.getVelocity();
@@ -104,6 +107,25 @@ public class Launcher extends SubsystemBase implements Loggable {
     }
   }
 
+  @Config
+  public void setDisplay(boolean displayVals) {
+    System.out.println("setDisplay called");
+    m_displayPIDFvals = displayVals;
+  }
+  
+  @Config
+  /**
+   * 
+   * @param kP
+   * @param kI
+   * @param kD
+   */
+  public void set_kPID(double kP, double kI, double kD) {
+    m_kP = kP;
+    m_kI = kI;
+    m_kD = kD;
+  }
+  /*
   @Config(name = "Set kP value", defaultValueNumeric = 1.0)
   public void set_kP(double kP) { m_kP = kP; }
   @Config
@@ -114,11 +136,13 @@ public class Launcher extends SubsystemBase implements Loggable {
   public void set_kIz(double kIz) { m_kIz = kIz; }
   @Config
   public void set_kFF(double kFF) { m_kFF = kFF; }
+  */
+
   @Config
   public void set_velocitySetpoint(double setpoint) { m_velocitySetpoint = setpoint; }
 
   public void launchAtRPM(double rpm) {
-    System.out.println("lunchAtRPM: rpm = " + rpm);
+    // System.out.println("lunchAtRPM: rpm = " + rpm);
     if (Robot.isReal()) {
       m_pidVelocity.setReference(rpm, ControlType.kVelocity);  
     } else {
