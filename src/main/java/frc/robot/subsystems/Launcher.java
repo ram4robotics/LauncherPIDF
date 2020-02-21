@@ -15,6 +15,9 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Spark;
+import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.Constants.LauncherConstants;
@@ -30,6 +33,10 @@ public class Launcher extends SubsystemBase implements Loggable {
   private final Spark msim_motorL, msim_motorR;
   private final Encoder msim_encoderL, msim_encoderR;
 
+  @Config.PIDController
+  private PIDController launchPidCntrl = new PIDController(LauncherConstants.kP, 
+      LauncherConstants.kI, LauncherConstants.kD);
+
   @Log.Graph
   private double m_velocityL, m_velocityR;
 
@@ -38,6 +45,8 @@ public class Launcher extends SubsystemBase implements Loggable {
   private double m_kP, m_kI, m_kD, m_kIz, m_kFF;
 
   private double m_velocitySetpoint;
+
+  private ShuffleboardTab mytab = Shuffleboard.getTab("Launcher PIDF tuning");
 
   /**
    * Creates a new Launcher.
@@ -88,12 +97,17 @@ public class Launcher extends SubsystemBase implements Loggable {
       m_encoderL = m_encoderR = null;
       m_pidVelocity = null;
     }
+
+    mytab.addNumber("m_kP", () -> m_kP);
   }
 
   @Override
   public void periodic() {
     if (m_displayPIDFvals) {
       System.out.println("kP = " + m_kP + ", kI = " + m_kI + ", kD = " + m_kD + ", m_velocitySetpoint = " + m_velocitySetpoint);
+    }
+    if (launchPidCntrl.getSetpoint() > 2000.0) {
+      System.out.println("Set point = " + launchPidCntrl.getSetpoint());
     }
     if (Robot.isReal()) {
       // This method will be called once per scheduler run
