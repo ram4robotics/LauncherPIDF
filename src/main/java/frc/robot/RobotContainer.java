@@ -10,6 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import io.github.oblarg.oblog.Logger;
+import io.github.oblarg.oblog.annotations.Log;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.Launcher;
@@ -22,6 +23,7 @@ import frc.robot.subsystems.Launcher;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
+  @Log
   private final Launcher m_launcher = new Launcher();
 
 
@@ -31,9 +33,6 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-
-    // Add Oblog support
-    Logger.configureLoggingAndConfig(this, false);
   }
 
   /**

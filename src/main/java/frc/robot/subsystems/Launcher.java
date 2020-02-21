@@ -33,8 +33,11 @@ public class Launcher extends SubsystemBase implements Loggable {
   @Log.Graph
   private double m_velocityL, m_velocityR;
 
-  @Log
+  @Config
   private double m_kP, m_kI, m_kD, m_kIz, m_kFF;
+
+  @Config
+  private double m_velocitySetpoint;
 
   /**
    * Creates a new Launcher.
@@ -93,18 +96,37 @@ public class Launcher extends SubsystemBase implements Loggable {
       // This method will be called once per scheduler run
       m_velocityL = m_encoderL.getVelocity();
       m_velocityR = m_encoderR.getVelocity();
+      launchAtRPM(m_velocitySetpoint);
     } else {
       m_velocityL = msim_encoderL.getRate();
       m_velocityR = msim_encoderR.getRate();
+      launchAtRPM(m_velocitySetpoint);
     }
   }
 
-  @Config
+  @Config(name = "Set kP value", defaultValueNumeric = 1.0)
   public void set_kP(double kP) { m_kP = kP; }
+  @Config
   public void set_kI(double kI) { m_kI = kI; }
+  @Config
   public void set_kD(double kD) { m_kD = kD; }
+  @Config
   public void set_kIz(double kIz) { m_kIz = kIz; }
+  @Config
   public void set_kFF(double kFF) { m_kFF = kFF; }
+  @Config
+  public void set_velocitySetpoint(double setpoint) { m_velocitySetpoint = setpoint; }
+
+  public void launchAtRPM(double rpm) {
+    System.out.println("lunchAtRPM: rpm = " + rpm);
+    if (Robot.isReal()) {
+      m_pidVelocity.setReference(rpm, ControlType.kVelocity);  
+    } else {
+      double pctSpeed = rpm / LauncherConstants.maxRPM;
+      msim_motorL.set(pctSpeed);
+      msim_motorR.set(-pctSpeed);
+    }
+  }
 
   public void launch(double pctSpeed) {
     if (Robot.isReal()) {
