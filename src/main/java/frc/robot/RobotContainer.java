@@ -9,9 +9,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import io.github.oblarg.oblog.Logger;
-import io.github.oblarg.oblog.annotations.Config;
-import io.github.oblarg.oblog.annotations.Log;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.Launcher;
@@ -25,8 +22,6 @@ import frc.robot.subsystems.Launcher;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
-  // @Config (name = "Display values", methodName = "setDisplay", methodTypes = {boolean.class})
-  // @Config (name = "Set Kp, kI, kD", methodName = "set_kPID", methodTypes = {double.class, double.class, double.class})
   private final Launcher m_launcher = new Launcher();
 
 
