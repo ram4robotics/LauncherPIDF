@@ -39,13 +39,7 @@ public class Launcher extends SubsystemBase {
   private double m_velocitySetpoint;
 
   private ShuffleboardTab mytab = Shuffleboard.getTab("Launcher PIDF tuning");
-  private NetworkTableEntry m_kP_setter = mytab.add("kP setter", 0.0).getEntry();
-  private NetworkTableEntry m_kI_setter = mytab.add("kI setter", 0.0).getEntry();
-  private NetworkTableEntry m_kD_setter = mytab.add("kD setter", 0.0).getEntry();
-  private NetworkTableEntry m_kIz_setter = mytab.add("kIz setter", 0.0).getEntry();
-  // private NetworkTableEntry m_kFF_setter = mytab.add("kFF setter", 0.0).getEntry();
   private NetworkTableEntry m_vel_setp_setter = mytab.add("Velocity setpoint setter", 2000.0).getEntry();
-  private NetworkTableEntry m_display_setter = mytab.add("Display setter", false).getEntry();
 
   private NetworkTableEntry m_velL_getter = mytab.add("Velocity L", 0.0).getEntry();
   private NetworkTableEntry m_velR_getter = mytab.add("Velocity R", 0.0).getEntry();
@@ -121,37 +115,6 @@ public class Launcher extends SubsystemBase {
       }
     }
     return (setPointChanged);
-  }
-
-  private void update_pidf() {
-    double m_kP_new = m_kP_setter.getDouble(m_kP);
-    double m_kI_new = m_kI_setter.getDouble(m_kI);
-    double m_kD_new = m_kD_setter.getDouble(m_kD);
-    double m_kIz_new = m_kIz_setter.getDouble(m_kIz);
-    // double m_kFF_new = m_kFF_setter.getDouble(m_kFF);
-    double m_velocitySetpoint_new = m_vel_setp_setter.getDouble(2000.0);
-    if (m_kP_new != m_kP) { m_kP = m_kP_new; m_pidVelocity.setP(m_kP_new); }
-    if (m_kI_new != m_kI) { m_kI = m_kI_new; m_pidVelocity.setI(m_kI_new); }
-    if (m_kD_new != m_kD) { m_kD = m_kD_new; m_pidVelocity.setD(m_kD_new); }
-    if (m_kIz_new != m_kIz) { m_kIz = m_kIz_new; m_pidVelocity.setIZone(m_kIz_new); }
-    // if (m_kFF_new != m_kFF) { m_kFF = m_kFF_new; m_pidVelocity.setFF(m_kFF_new); }
-    if (m_velocitySetpoint_new != m_velocitySetpoint) {
-      m_velocitySetpoint = m_velocitySetpoint_new;
-      // Calculate m_kFF for the given set point velocity, and for acceleration of (maxRPM/60) Rotation/second^2.
-      m_kFF = m_feedforward.calculate(m_velocitySetpoint / 60, LauncherConstants.kMaxRPM / 60) / 
-        (LauncherConstants.kMaxVoltage * LauncherConstants.kMaxRPM);
-    }
-    m_displayPIDFvals = m_display_setter.getBoolean(false);
-    // m_displayPIDFvals = true;
-    if (m_displayPIDFvals) {
-      System.out.println("kP = " + m_kP + ", kI = " + m_kI + ", kD = " + m_kD + ", m_velocitySetpoint = " + m_velocitySetpoint +
-        ", m_kFF = " + m_kFF);
-    }
-    if (Robot.isReal()) {
-      m_velL_getter.setDouble(m_encoderL.getVelocity());
-      m_velR_getter.setDouble(m_encoderR.getVelocity());
-    }
-    m_kFF_getter.setDouble(m_kFF);
   }
 
   @Override

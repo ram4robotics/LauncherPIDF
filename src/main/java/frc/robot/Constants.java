@@ -23,7 +23,7 @@ public final class Constants {
     public static final class LauncherConstants {
         public static final int kLauncherMotorLeft_id = 31;
         public static final int kLauncherMotorRight_id = 39;
-        public static final double kClosedLoopRampRate = 0.20;  // 200 milli seconds from 0 to full throttle
+        public static final double kClosedLoopRampRate = 1.0;  // 1 second from 0 to full throttle
         public static final IdleMode kIdleMode = IdleMode.kCoast;
         public static final int kSparkMaxBuiltinCPR = 42;
         public static final int kNeoEncoderPulsesPerRev = kSparkMaxBuiltinCPR * 4;
@@ -43,7 +43,7 @@ public final class Constants {
         public static final double  kI = 0;
         public static final double  kD = 0; 
         public static final double  kIz = 0; 
-        // public static final double  kFF = 0.00015; // zero-zero-zero-one-five
+        public static final double  kFF = 0.00015; // zero-zero-zero-one-five
         public static final double  kMaxOutput = 1; 
         public static final double  kMinOutput = -1;
         public static final double  kMaxRPM = 5700;
